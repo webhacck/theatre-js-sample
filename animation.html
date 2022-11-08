@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Theatre.jsサンプル</title>
+  <style>
+    body {
+      color: white;
+      background: black;
+    }
+    h1 {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="title">Hello Theatre.js</h1>
+
+<script type="module">
+  import 'https://cdn.jsdelivr.net/npm/@theatre/browser-bundles@0.5.0-insiders.88df1ef/dist/core-only.min.js'; //コア機能だけを使う
+  import data from './state.json' assert {type: 'json'}; //JSONファイルの読み込み
+  
+  const { core } = Theatre;
+  const title = document.getElementById('title');
+  const project = core.getProject('HTML Animation Tutorial', {
+    state: data //JSONのアニメーションデータを利用する
+  });
+  const sheet = project.sheet('Sheet');
+  const h1 = sheet.object('Heading1', {
+    y: 0,
+    color: core.types.rgba({r:1,g:1,b:1,a:1}),
+    opacity: core.types.number(1, { range: [0, 1] })
+  });
+
+  
+  h1.onValuesChange(obj => {
+    title.style.transform = `translateY(${obj.y}px)`;
+    title.style.color = `${obj.color}`;
+    title.style.opacity = obj.opacity;
+  })
+
+  //アニメーションの再生
+  project.ready.then(() => {
+    sheet.sequence.play({ iterationCount: Infinity, range: [0, 6] })
+  })
+</script>
+</body>
+</html>
