@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Theatre.jsサンプル</title>
+  <style>
+    body {
+      color: white;
+      background: black;
+    }
+    h1 {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="title">Hello Theatre.js</h1>
+
+<script type="module">
+  import 'https://cdn.jsdelivr.net/npm/@theatre/browser-bundles@0.5.0-insiders.88df1ef/dist/core-and-studio.js';
+  
+  const { core, studio } = Theatre;
+  const title = document.getElementById('title');
+  const project = core.getProject('HTML Animation Tutorial'); //新規プロジェクトの作成
+  const sheet = project.sheet('Sheet'); //sheetの作成
+  
+  //h1要素の高さ・色・透明度のパラメータを設定
+  const h1 = sheet.object('Heading1', {
+    y: 0,
+    color: core.types.rgba({r:1,g:1,b:1,a:1}),
+    opacity: core.types.number(1, { range: [0, 1] })
+  });
+
+  
+  studio.initialize();
+
+
+  // パラメータとh1要素のスタイルを連動させる
+  h1.onValuesChange(obj => {
+    title.style.transform = `translateY(${obj.y}px)`;
+    title.style.color = `${obj.color}`;
+    title.style.opacity = obj.opacity;
+  })
+</script>
+</body>
+</html>
